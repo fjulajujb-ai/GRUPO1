@@ -1,0 +1,52 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\TRABAJO_FI_PROGRA\\SistemaControlAsistencia_G1\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{80D1E4F1-DEAC-44FD-AA80-25CA5DC3A121}|..\\CapaPresentacionG1\\CapaPresentacionG1.csproj|e:\\trabajo_fi_progra\\capapresentaciong1\\frmprincipalg1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80D1E4F1-DEAC-44FD-AA80-25CA5DC3A121}|..\\CapaPresentacionG1\\CapaPresentacionG1.csproj|e:\\trabajo_fi_progra\\capapresentaciong1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "frmPrincipalG1.Designer.cs",
+              "DocumentMoniker": "E:\\TRABAJO_FI_PROGRA\\CapaPresentacionG1\\frmPrincipalG1.Designer.cs",
+              "RelativeDocumentMoniker": "..\\CapaPresentacionG1\\frmPrincipalG1.Designer.cs",
+              "ToolTip": "E:\\TRABAJO_FI_PROGRA\\CapaPresentacionG1\\frmPrincipalG1.Designer.cs",
+              "RelativeToolTip": "..\\CapaPresentacionG1\\frmPrincipalG1.Designer.cs",
+              "ViewState": "AgIAAEQAAAAAAAAAAAAwwNwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-10T21:14:32.466Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "E:\\TRABAJO_FI_PROGRA\\CapaPresentacionG1\\Program.cs",
+              "RelativeDocumentMoniker": "..\\CapaPresentacionG1\\Program.cs",
+              "ToolTip": "E:\\TRABAJO_FI_PROGRA\\CapaPresentacionG1\\Program.cs",
+              "RelativeToolTip": "..\\CapaPresentacionG1\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-10T19:58:29.846Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
