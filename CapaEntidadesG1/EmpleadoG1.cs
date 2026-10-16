@@ -7,6 +7,8 @@
         public string Nombres { get; set; }
         public string Apellidos { get; set; }
         public int IdDepartamento { get; set; }
+        public string Puesto { get; set; }       
+        public decimal SalarioBase { get; set; }  
         public bool Activo { get; set; }
     }
 }

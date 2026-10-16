@@ -19,27 +19,14 @@ namespace CapaPresentacionG1
         // ==========================================
         private void btnGuardarG1_Click(object sender, EventArgs e)
         {
-            // Validaciones
-            if (string.IsNullOrWhiteSpace(txtCodigoG1.Text))
-            {
-                MessageBox.Show("Ingrese el código de carnet.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(txtNombresG1.Text))
-            {
-                MessageBox.Show("Ingrese los nombres.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(txtApellidosG1.Text))
-            {
-                MessageBox.Show("Ingrese los apellidos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(txtIdDeptoG1.Text))
-            {
-                MessageBox.Show("Ingrese el ID del departamento.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            // Validaciones existentes...
+            if (string.IsNullOrWhiteSpace(txtCodigoG1.Text)) { MessageBox.Show("Ingrese el código de carnet."); return; }
+            if (string.IsNullOrWhiteSpace(txtNombresG1.Text)) { MessageBox.Show("Ingrese los nombres."); return; }
+            if (string.IsNullOrWhiteSpace(txtApellidosG1.Text)) { MessageBox.Show("Ingrese los apellidos."); return; }
+            if (string.IsNullOrWhiteSpace(txtIdDeptoG1.Text)) { MessageBox.Show("Ingrese el ID del departamento."); return; }
+            // NUEVAS validaciones
+            if (string.IsNullOrWhiteSpace(txtPuestoG1.Text)) { MessageBox.Show("Ingrese el puesto."); return; }
+            if (string.IsNullOrWhiteSpace(txtSalarioG1.Text)) { MessageBox.Show("Ingrese el salario base."); return; }
 
             try
             {
@@ -47,47 +34,56 @@ namespace CapaPresentacionG1
                 {
                     conexion.Open();
 
-                    // Verificar que el código de carnet no exista
+                    // Verificar que el código no exista
                     string queryVerificar = "SELECT COUNT(*) FROM Empleados WHERE CodigoCarnet = @codigo";
                     SqlCommand cmdVerificar = new SqlCommand(queryVerificar, conexion);
                     cmdVerificar.Parameters.AddWithValue("@codigo", txtCodigoG1.Text.Trim());
                     int existe = (int)cmdVerificar.ExecuteScalar();
                     if (existe > 0)
                     {
-                        MessageBox.Show("Ya existe un empleado con ese código de carnet.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Ya existe un empleado con ese código de carnet.");
                         return;
                     }
 
-                    // Insertar el empleado
-                    string query = @"INSERT INTO Empleados (CodigoCarnet, Nombres, Apellidos, IdDepartamento, Activo) 
-                                     VALUES (@codigo, @nombres, @apellidos, @idDepto, @activo)";
+                    // Insertar con los nuevos campos
+                    string query = @"INSERT INTO Empleados (CodigoCarnet, Nombres, Apellidos, IdDepartamento, Puesto, SalarioBase, Activo) 
+                             VALUES (@codigo, @nombres, @apellidos, @idDepto, @puesto, @salario, @activo)";
                     SqlCommand cmd = new SqlCommand(query, conexion);
                     cmd.Parameters.AddWithValue("@codigo", txtCodigoG1.Text.Trim());
                     cmd.Parameters.AddWithValue("@nombres", txtNombresG1.Text.Trim());
                     cmd.Parameters.AddWithValue("@apellidos", txtApellidosG1.Text.Trim());
                     cmd.Parameters.AddWithValue("@idDepto", Convert.ToInt32(txtIdDeptoG1.Text.Trim()));
+                    cmd.Parameters.AddWithValue("@puesto", txtPuestoG1.Text.Trim());
+                    cmd.Parameters.AddWithValue("@salario", Convert.ToDecimal(txtSalarioG1.Text.Trim()));
                     cmd.Parameters.AddWithValue("@activo", chkActivoG1.Checked ? 1 : 0);
                     cmd.ExecuteNonQuery();
 
-                    MessageBox.Show("Empleado guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    SubLimpiarG1();
+                    MessageBox.Show("Empleado guardado correctamente.");
+                    
                     SubCargarEmpleadosG1();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al guardar: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error al guardar: " + ex.Message);
             }
         }
 
         // ==========================================
         // EVENTO: LIMPIAR CAMPOS
         // ==========================================
-        private void btnLimpiarG1_Click(object sender, EventArgs e)
+        private void SubLimpiarG1()
         {
-            SubLimpiarG1();
+            txtIdEmpleadoG1.Clear();
+            txtCodigoG1.Clear();
+            txtNombresG1.Clear();
+            txtApellidosG1.Clear();
+            txtIdDeptoG1.Clear();
+            txtPuestoG1.Clear();      // NUEVO
+            txtSalarioG1.Clear();     // NUEVO
+            chkActivoG1.Checked = true;
+            txtCodigoG1.Focus();
         }
-
         // ==========================================
         // EVENTO: BUSCAR EMPLEADO
         // ==========================================
@@ -142,16 +138,7 @@ namespace CapaPresentacionG1
         // ==========================================
         // MÉTODOS AUXILIARES
         // ==========================================
-        private void SubLimpiarG1()
-        {
-            txtIdEmpleadoG1.Clear();
-            txtCodigoG1.Clear();
-            txtNombresG1.Clear();
-            txtApellidosG1.Clear();
-            txtIdDeptoG1.Clear();
-            chkActivoG1.Checked = true;
-            txtCodigoG1.Focus();
-        }
+
 
         private void SubLimpiarEliminarG1()
         {
@@ -159,6 +146,13 @@ namespace CapaPresentacionG1
             txtNombresEliminarG1.Clear();
             txtApellidosEliminarG1.Clear();
             txtIdEliminarG1.Focus();
+        }
+        // ==========================================
+        // EVENTO: LIMPIAR CAMPOS (BOTÓN LIMPIAR)
+        // ==========================================
+        private void btnLimpiarG1_Click(object sender, EventArgs e)
+        {
+            SubLimpiarG1();
         }
 
         private void SubCargarEmpleadosG1()
@@ -169,16 +163,18 @@ namespace CapaPresentacionG1
                 {
                     conexion.Open();
                     string query = @"
-                        SELECT 
-                            E.IdEmpleado,
-                            E.CodigoCarnet,
-                            E.Nombres,
-                            E.Apellidos,
-                            D.NombreDepartamento,
-                            E.Activo
-                        FROM Empleados E
-                        INNER JOIN Departamentos D ON E.IdDepartamento = D.IdDepartamento
-                        ORDER BY E.IdEmpleado DESC";
+                SELECT 
+                    E.IdEmpleado,
+                    E.CodigoCarnet,
+                    E.Nombres,
+                    E.Apellidos,
+                    E.Puesto,
+                    E.SalarioBase,
+                    D.NombreDepartamento,
+                    E.Activo
+                FROM Empleados E
+                INNER JOIN Departamentos D ON E.IdDepartamento = D.IdDepartamento
+                ORDER BY E.IdEmpleado DESC";
 
                     SqlDataAdapter da = new SqlDataAdapter(query, conexion);
                     System.Data.DataTable dt = new System.Data.DataTable();
@@ -191,6 +187,9 @@ namespace CapaPresentacionG1
                         dgvEmpleadosG1.Columns["CodigoCarnet"].HeaderText = "Código";
                         dgvEmpleadosG1.Columns["Nombres"].HeaderText = "Nombres";
                         dgvEmpleadosG1.Columns["Apellidos"].HeaderText = "Apellidos";
+                        dgvEmpleadosG1.Columns["Puesto"].HeaderText = "Puesto";
+                        dgvEmpleadosG1.Columns["SalarioBase"].HeaderText = "Salario Base";
+                        dgvEmpleadosG1.Columns["SalarioBase"].DefaultCellStyle.Format = "N2";
                         dgvEmpleadosG1.Columns["NombreDepartamento"].HeaderText = "Departamento";
                         dgvEmpleadosG1.Columns["Activo"].HeaderText = "Activo";
                     }
@@ -198,8 +197,9 @@ namespace CapaPresentacionG1
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar empleados: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error al cargar empleados: " + ex.Message);
             }
         }
+    
     }
 }
